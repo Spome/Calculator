@@ -1,3 +1,16 @@
+let numberInput = document.body.querySelector('#numberInput');
+
+function addNumberToDisplay() {
+  let buttons = document.querySelectorAll(".numberButton");
+  [...buttons].forEach(function(element) {
+    element.addEventListener('click', function() {
+      numberInput.value += element.value;
+    });
+  });
+}
+
+addNumberToDisplay();
+
 function add(a,b) {
   return a + b;
 }
