@@ -1,6 +1,4 @@
 
-let numberInput = document.body.querySelector('#numberInput');
-
 let addButton = document.body.querySelector('#addButton');
 let subtractButton = document.body.querySelector('#subtractButton');
 let multiplyButton = document.body.querySelector('#multiplyButton');
@@ -12,11 +10,14 @@ let clearButton = document.body.querySelector('#clearButton');
 
 let operateButton = document.body.querySelector('#operateButton');
 
-let beforeValue;
-let afterValue;
 let operatorType;
 let operatorToggle;
 
+let currentDisplay = document.body.querySelector('#currentDisplay');
+let historyDisplay = document.body.querySelector('#historyDisplay');
+
+let firstValue;
+let secondValue;
 
 
 let inputValuesArray;
@@ -31,32 +32,54 @@ function addOperatorToDisplay() {
 
 function operatorFunction() {
 
-  if (operatorType === undefined) {
-    beforeValue = numberInput.value;
+  if (operatorType !== undefined) {
+    console.log("tes ttdst ")
+    computeAnswer();
     operatorType = this.value;
-    numberInput.value += this.textContent;
+    firstValue = currentDisplay.textContent;
+    historyDisplay.textContent = `${firstValue} ${this.textContent}`
+    currentDisplay.textContent = "";
+    console.log(operatorType);
+    //operatorType = undefined;
+    //operatorFunction();
+    //operatorType = this.value;
   }
   else {
-    computeAnswer();
-    numberInput.value += this.textContent;
-    operatorType = undefined;
     operatorType = this.value;
+    firstValue = currentDisplay.textContent;
+    historyDisplay.textContent = `${firstValue} ${this.textContent}`
+    currentDisplay.textContent = "";
   }
-  console.log(operatorType);
 }
 
 
 function computeAnswer() {
-    inputValuesArray = numberInput.value.split(/[+÷*-]/);
-    let operateFunction = window[operatorType];
-    let operateAnswer;
-    if (typeof operateFunction === "function") {
-      operateAnswer = operateFunction.apply(null, inputValuesArray);
-      numberInput.value = operateAnswer;
-      operatorType = undefined;
-      console.log("test")
+  if (operatorType !== undefined) {
+    secondValue = currentDisplay.textContent;
+    firstValue = +firstValue; // firstValue from string to number
+    secondValue = +secondValue; // secondValue from string to number
+    let finalAnswer;
+    switch(operatorType) {
+      case "add":
+        finalAnswer = operate(add, firstValue, secondValue);
+        break;
+      case "subtract":
+        finalAnswer = operate(subtract, firstValue, secondValue);
+        break;
+      case "multiply":
+        finalAnswer = operate(multiply, firstValue, secondValue);
+        break;
+      case "divide":
+        finalAnswer = operate(divide, firstValue, secondValue);
     }
-}
+    historyDisplay.textContent += ` ${currentDisplay.textContent}`
+    currentDisplay.textContent = finalAnswer;
+    operatorType = undefined;
+    }
+    // If operatorType is undefined, then do nothing.
+  
+  }
+
 
 operateButton.addEventListener("click", computeAnswer);
 
@@ -67,15 +90,17 @@ function addNumberToDisplay() {
   let buttons = document.querySelectorAll(".numberButton");
   [...buttons].forEach(function(element) {
     element.addEventListener('click', function() {
-      displayValue += element.value;
-      numberInput.value += element.value;
+      currentDisplay.textContent += element.value;
     });
   });
 }
 
 function clearInput() {
-  numberInput.value = "";
-  displayValue = "";
+  historyDisplay.textContent = "";
+  currentDisplay.textContent = "";
+  firstValue = "";
+  secondValue = "";
+  operatorType = undefined;
 }
 
 function calculator() {
