@@ -1,8 +1,11 @@
 
 let numberButtons = document.querySelectorAll(".numberButton");
 let operatorButtons = document.body.querySelectorAll(".operatorButton");
+
 let clearButton = document.body.querySelector('#clearButton');
+let undoButton = document.body.querySelector('#undo');
 let operateButton = document.body.querySelector('#operateButton');
+
 
 let currentDisplay = document.body.querySelector('#currentDisplay');
 let historyDisplay = document.body.querySelector('#historyDisplay');
@@ -13,12 +16,18 @@ let operatorToggle;
 let firstValue;
 let secondValue;
 
+document.addEventListener('keydown', keyboardInput);
+
+undoButton.addEventListener("click", undo);
+
 numberButtons.forEach(function(element) {
   element.addEventListener('click', addNumberToDisplay);
 });
 
 operatorButtons.forEach(function(element) {
-  element.addEventListener('click', operatorFunction);
+  element.addEventListener('click', function() {
+    operatorFunction(element.textContent);
+  });
 });
 
 clearButton.addEventListener("click", clearInput);
@@ -29,11 +38,11 @@ function addNumberToDisplay() {
   currentDisplay.textContent += this.value;
 }
 
-function operatorFunction() {
+function operatorFunction(operator) {
   if (operatorType !== undefined) computeAnswer();
-  operatorType = this.value;
   firstValue = currentDisplay.textContent;
-  historyDisplay.textContent = `${firstValue} ${this.textContent}`
+  operatorType = operator;
+  historyDisplay.textContent = `${firstValue} ${operator}`
   currentDisplay.textContent = "";
 }
 
@@ -45,6 +54,14 @@ function clearInput() {
   operatorType = undefined;
 }
 
+function undo() {
+  if (currentDisplay !== "") {
+    let length = currentDisplay.textContent.length;
+    let newString = currentDisplay.textContent.substring(0,length-1);
+    currentDisplay.textContent = newString;
+  }
+}
+
 function computeAnswer() {
   if (operatorType !== undefined) {
     secondValue = currentDisplay.textContent;
@@ -54,57 +71,97 @@ function computeAnswer() {
     let finalAnswer;
 
     switch(operatorType) {
-      case "add":
+      case "+":
         answer = operate(add, firstValue, secondValue);
         break;
-      case "subtract":
+      case "-":
         answer = operate(subtract, firstValue, secondValue);
         break;
-      case "multiply":
+      case "*":
         answer = operate(multiply, firstValue, secondValue);
         break;
-      case "divide":
+      case "÷":
         answer = operate(divide, firstValue, secondValue);
     }
 
-    historyDisplay.textContent += ` ${currentDisplay.textContent}`
-
-    if (countDecimals(answer) > 5) {
-      finalAnswer = answer.toFixed(5);
-      currentDisplay.textContent = finalAnswer
+    if(answer === "ERROR") {
+      alert("Error! Can't divide by 0")
+      clearInput();
     }
     else {
-      currentDisplay.textContent = answer;
-    }
+      historyDisplay.textContent += ` ${currentDisplay.textContent}`
 
-    operatorType = undefined;
+      if (countDecimals(answer) > 5) {
+        finalAnswer = answer.toFixed(5);
+        currentDisplay.textContent = finalAnswer
+      }
+      else {
+        currentDisplay.textContent = answer;
+      }
+      operatorType = undefined;
+      }
     }
-
     // If operatorType is undefined, then do nothing.
   }
 
+  function keyboardInput(event) {
+    const keyName = event.key;
+    if (+keyName >= 0 && +keyName < 10) {
+      currentDisplay.textContent += keyName;
+    }
+  
+    if(keyName === "+" || keyName === "-" || keyName === "÷" ||
+    keyName === "*") {
+      operatorFunction(keyName);
+    }
+  
+    if(keyName === "Escape") {
+      clearInput();
+    }
+  
+    if(keyName === "Backspace") {
+      undo();
+    }
+  
+    if(keyName === "=" || keyName === "Enter") {
+      computeAnswer();
+    }
+  }
+  
 function countDecimals(value) {
   if (Math.floor(value) !== value) {
     return value.toString().split(".")[1].length || 0;
   }
 }
 
+
 function add(a,b) {
-  return +a + +b;
+  return a + b;
 }
 
 function subtract(a,b) {
-  return +a - +b;
+  return a - b;
 }
 
 function multiply(a,b) {
-  return +a * +b;
+  return a * b;
 }
 
 function divide(a,b) {
-  return +a / +b;
+  if(b === 0) {
+    return "ERROR";
+  }
+  else {
+    return a / b;
+  }
 }
 
 function operate(operator, a, b) {
+  /*
+  if (operator === "+") return add(a,b);
+  if (operator === "-") return subtract(a,b);
+  if (operator === "*") return multiply(a,b);
+  if (operator === "÷") return divide(a,b);
+*/
   return operator(a,b);
 }
