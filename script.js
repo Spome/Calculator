@@ -5,7 +5,7 @@ let operatorButtons = document.body.querySelectorAll(".operatorButton");
 let clearButton = document.body.querySelector('#clearButton');
 let undoButton = document.body.querySelector('#undo');
 let operateButton = document.body.querySelector('#operateButton');
-
+let dotButton = document.body.querySelector('#dot');
 
 let currentDisplay = document.body.querySelector('#currentDisplay');
 let historyDisplay = document.body.querySelector('#historyDisplay');
@@ -16,9 +16,9 @@ let operatorToggle;
 let firstValue;
 let secondValue;
 
-document.addEventListener('keydown', keyboardInput);
+let dotToggle = false;
 
-undoButton.addEventListener("click", undo);
+dotButton.addEventListener("click", addDotButton);
 
 numberButtons.forEach(function(element) {
   element.addEventListener('click', addNumberToDisplay);
@@ -34,16 +34,29 @@ clearButton.addEventListener("click", clearInput);
 
 operateButton.addEventListener("click", computeAnswer);
 
+undoButton.addEventListener("click", undo);
+
+document.addEventListener('keydown', keyboardInput);
+
 function addNumberToDisplay() {
   currentDisplay.textContent += this.value;
 }
 
+function addDotButton() {
+  if(dotToggle === false) {
+    currentDisplay.textContent += ".";
+    dotToggle = true;
+  }
+}
+
 function operatorFunction(operator) {
   if (operatorType !== undefined) computeAnswer();
+
   firstValue = currentDisplay.textContent;
   operatorType = operator;
   historyDisplay.textContent = `${firstValue} ${operator}`
   currentDisplay.textContent = "";
+  dotToggle = false;
 }
 
 function clearInput() {
@@ -52,6 +65,7 @@ function clearInput() {
   firstValue = "";
   secondValue = "";
   operatorType = undefined;
+  dotToggle = false;
 }
 
 function undo() {
@@ -69,6 +83,7 @@ function computeAnswer() {
     secondValue = +secondValue; // secondValue from string to number
     let answer;
     let finalAnswer;
+
 
     switch(operatorType) {
       case "+":
@@ -106,6 +121,7 @@ function computeAnswer() {
 
   function keyboardInput(event) {
     const keyName = event.key;
+    console.log(keyName);
     if (+keyName >= 0 && +keyName < 10) {
       currentDisplay.textContent += keyName;
     }
@@ -122,10 +138,15 @@ function computeAnswer() {
     if(keyName === "Backspace") {
       undo();
     }
-  
-    if(keyName === "=" || keyName === "Enter") {
+
+    if(keyName === ".") {
+      addDotButton();
+    }
+
+    if(keyName === "Enter" || keyName === "=" || keyName === "k") {
       computeAnswer();
     }
+
   }
   
 function countDecimals(value) {
