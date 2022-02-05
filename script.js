@@ -66,6 +66,7 @@ function clearInput() {
   secondValue = "";
   operatorType = undefined;
   dotToggle = false;
+  clearButton.blur();
 }
 
 function undo() {
@@ -74,6 +75,7 @@ function undo() {
     let newString = currentDisplay.textContent.substring(0,length-1);
     currentDisplay.textContent = newString;
   }
+  undoButton.blur();
 }
 
 function computeAnswer() {
@@ -95,7 +97,7 @@ function computeAnswer() {
       case "*":
         answer = operate(multiply, firstValue, secondValue);
         break;
-      case "÷":
+      case "/":
         answer = operate(divide, firstValue, secondValue);
     }
 
@@ -126,7 +128,7 @@ function computeAnswer() {
       currentDisplay.textContent += keyName;
     }
   
-    if(keyName === "+" || keyName === "-" || keyName === "÷" ||
+    if(keyName === "+" || keyName === "-" || keyName === "/" ||
     keyName === "*") {
       operatorFunction(keyName);
     }
@@ -145,6 +147,7 @@ function computeAnswer() {
 
     if(keyName === "Enter" || keyName === "=" || keyName === "k") {
       computeAnswer();
+
     }
 
   }

@@ -9,36 +9,44 @@
 <header>
 </header>
 <body>
-<div id="calculator">
-  
+<div id="wrapper">
+  <div id="calculator">
+    
 
 
-  <div id="historyDisplay"></div>
-  <div id="currentDisplay"></div>
+    <div id="historyDisplay"></div>
+    <div id="currentDisplay"></div>
 
 
-  <button class="numberButton" id="button0" value="0">0</button>
-  <button class="numberButton" id="button1" value="1">1</button>
-  <button class="numberButton" id="button2" value="2">2</button>
-  <button class="numberButton" id="button3" value="3">3</button>
-  <button class="numberButton" id="button4" value="4">4</button>
-  <button class="numberButton" id="button5" value="5">5</button>
-  <button class="numberButton" id="button6" value="6">6</button>
-  <button class="numberButton" id="button7" value="7">7</button>
-  <button class="numberButton" id="button8" value="8">8</button>
-  <button class="numberButton" id="button9" value="9">9</button>
+    <div id="cuWrapper">
+        <button id="clearButton">CLEAR</button>
+        <button id="undo">UNDO</button>
+    </div>
 
-  <button id="operateButton">=</button>
-  <button id="clearButton">CLEAR</button>
-  <button id="undo">UNDO</button>
-  <button id="dot">.</button>
+    <div id="buttonWrapper">
+        <button class="numberButton" id="button9" value="9">9</button>
+        <button class="numberButton" id="button8" value="8">8</button>
+        <button class="numberButton" id="button7" value="7">7</button>
+        <button id="addButton" class="operatorButton" value="add">+</button>
+        <button class="numberButton" id="button6" value="6">6</button>
+        <button class="numberButton" id="button5" value="5">5</button>
+        <button class="numberButton" id="button4" value="4">4</button>
+        <button id="subtractButton" class="operatorButton" value="subtract">-</button>
+        <button class="numberButton" id="button3" value="3">3</button>
+        <button class="numberButton" id="button0" value="2">2</button>
+        <button class="numberButton" id="button1" value="1">1</button>
+        <button id="divideButton" class="operatorButton" value="divide">÷</button>
+        <button id="dot">.</button>
+        <button class="numberButton" id="button2" value="0">0</button>
 
-  <button id="addButton" class="operatorButton" value="add">+</button>
-  <button id="subtractButton" class="operatorButton" value="subtract">-</button>
-  <button id="divideButton" class="operatorButton" value="divide">÷</button>
-  <button id="multiplyButton" class="operatorButton" value="multiply">*</button>
+
+
+        <button id="operateButton">=</button>
+
+        <button id="multiplyButton" class="operatorButton" value="multiply">*</button>
+    </div>
+  </div>
 </div>
-
 
 </body>
 </html>
